@@ -1,0 +1,21 @@
+body{
+  background-image: linear-gradient(45deg, #93a5cf 0%, #e4efe9 100%);
+}
+.glassy{
+  /* background: rgba(67, 67, 67, 0.23); */
+  /* box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);  */
+  /* backdrop-filter: blur(13.8px); */
+  /* -webkit-backdrop-filter: blur(13.8px); */
+  /* border: 1px solid rgba(67, 67, 67, 0.31); */
+  /**/
+  /* From https://css.glass */
+background: rgba(213, 213, 213, 0.23);
+box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+backdrop-filter: blur(13.8px);
+-webkit-backdrop-filter: blur(13.8px);
+border: 1px solid rgba(213, 213, 213, 0.31);
+}
+
+.ctmshadow{
+    background-image: linear-gradient(45deg, #000000d4 0%, #0000003b 100%);
+}

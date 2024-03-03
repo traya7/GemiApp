@@ -1,0 +1,8 @@
+{
+  "scripts":{
+    "lint": "npx tailwindcss -i ./assets/input.css -o ./assets/global.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+}
