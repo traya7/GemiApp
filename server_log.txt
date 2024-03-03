@@ -1,0 +1,2 @@
+2024/03/03 18:12:33 - Mongo DB connected!
+2024/03/03 18:12:33 - Http Server running!

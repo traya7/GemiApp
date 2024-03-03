@@ -23,7 +23,9 @@ func New(s *auth.AuthService) *PageHandler {
 
 func (h *PageHandler) Route(r *mux.Router) {
 	r.HandleFunc("/", h.handleHome)
+
 	r.HandleFunc("/login", h.handleLogin)
+
 	r.HandleFunc("/game/ludo/lobby", h.handleLudoLobby)
 }
 
@@ -55,19 +57,4 @@ func (h *PageHandler) handleHome(w http.ResponseWriter, r *http.Request) {
 	)
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.ExecuteTemplate(w, "index.tmpl", data)
-}
-
-func (h *PageHandler) handleLogin(w http.ResponseWriter, r *http.Request) {
-	_, err := middleware.AuthMiddleware(r)
-	if err == nil {
-		http.Redirect(w, r, "/", http.StatusSeeOther)
-		return
-	}
-	tmpl := template.Must(template.ParseFiles("./app/web/views/login.tmpl"))
-	w.Header().Set("Content-Type", "text/html")
-	tmpl.Execute(w, nil)
-}
-
-func (h *PageHandler) handleLudoLobby(w http.ResponseWriter, r *http.Request) {
-
 }
