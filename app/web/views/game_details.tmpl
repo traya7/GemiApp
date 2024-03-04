@@ -1,0 +1,58 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="./assets/global.css" rel="stylesheet">
+  <link href="./assets/main.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+</head>
+
+<body class="min-h-screen">
+
+  {{ template "base_menu" . }}
+  <div class="p-2 mx-3 my-6 glassy">
+    <div class="flex items-center">
+      <div class="p-4">
+        <img src="/assets/images/ludo-logo.png" class="w-20" />
+      </div>
+      <div class="flex-1">
+        <h1 class="text-xl mb-2">Ludo Classic</h1>
+        <pa class="text-sm">
+          Lorem ipsum dolor sit amet, officia excepteur ex fugiat reprehenderit enim labore culpa sint ad nisi Lorem
+          pariatur mollit ex esse exercitation amet.</p>
+      </div>
+    </div>
+  </div>
+  <div class="m-3">
+    <h2 class="text-xl font-bold underline">MODES</h2>
+    <div class="my-2 flex items-center p-3 glassy rounded-lg">
+      <div class="flex-1">
+        <h2>PLAYERS: 4</h2>
+        <h2>ROUNDS: 1</h2>
+      </div>
+      <a href="/game/ludo/lobby?id=dfx8s" class="bg-black text-white px-4 py-2 rounded-lg">
+        <p>PLAY</p>
+      </a>
+    </div>
+    <div class="my-2 flex items-center p-3 glassy rounded-lg">
+      <div class="flex-1">
+        <h2>PLAYERS: 8</h2>
+        <h2>ROUNDS: 2</h2>
+      </div>
+      <button class="bg-black text-white px-4 py-2 rounded-lg"> PLAY </button>
+    </div>
+    <div class="my-2 flex items-center p-3 glassy rounded-lg">
+      <div class="flex-1">
+        <h2>PLAYERS: 16</h2>
+        <h2>ROUNDS: 2</h2>
+      </div>
+      <button class="bg-black text-white px-4 py-2 rounded-lg"> PLAY </button>
+    </div>
+  </div>
+</body>
+
+</html>

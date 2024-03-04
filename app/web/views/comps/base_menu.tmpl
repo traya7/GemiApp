@@ -1,0 +1,56 @@
+{{ define "base_menu" }}
+<div id="menu" class="fixed z-20 top-0 left-0 w-screen h-screen flex hidden">
+  <div id="menucloser" class="flex-1 bg-[#00000070]"> </div>
+  <div style="background-color: #f7f7f7a3;" class="glassy flex flex-col justify-between p-6 w-2/3">
+    <div class="flex flex-col items-center gap-3 py-3">
+      <img src="/assets/images/avatar.avif" class="border-4 rounded-full w-32 h-32" />
+      <h2 class="text-center">Hello, <b>{{ .Username }}</b></h2>
+    </div>
+    <div class="flex flex-col gap-2">
+
+      {{ range $key,$val := .menu_items }}
+      {{ if eq $val.Name "SEP" }}
+      <hr class="my-2 mx-4" />
+      {{ else }}
+      <a href="{{ $val.Link }}" class="bg-gray-100 p-3 border text-start rounded-md">
+        <p class="text-sm font-bold"> {{ $val.Name }} </p>
+      </a>
+      {{ end }}
+      {{ end }}
+      <button hx-post="/api/user/logout" class="bg-black text-white rounded-lg py-3">
+        Logout
+      </button>
+    </div>
+    <div>
+    </div>
+  </div>
+</div>
+
+<div class="fixed h-16 w-full glassy z-10 flex justify-between items-center drop-shadow-md p-3">
+  <a href="/" class="w-[42px] font-bold text-xl text-center">Traya7</a>
+  <div class="flex w-32 rounded-lg border-2">
+    <h2 class="p-2 bg-gray-50 rounded-l-lg text-center flex-1">{{ .Balance }}</h2>
+    <h2 class="py-3 px-3 bg-blue-400 rounded-r-lg">
+      <p class="text-xs text-white font-bold">TND</p>
+    </h2>
+  </div>
+  <div class="flex gap-2 items-center">
+    <button id="menu-btn" class="bg-white border rounded-lg p-2">
+      <svg class="w-6 h-6 text-gray-800" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+        viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-width="2" d="M5 7h14M5 12h14M5 17h14" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<script>
+  const fn = () => {
+    document.getElementById("menu").classList.toggle("hidden")
+    document.querySelector("body").classList.toggle("overflow-hidden")
+  }
+  document.getElementById("menu-btn").addEventListener("click", fn)
+  document.getElementById("menucloser").addEventListener("click", fn)
+</script>
+<div class="h-16"></div>
+{{ end }}

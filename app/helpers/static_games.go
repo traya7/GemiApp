@@ -2,15 +2,15 @@ package helpers
 
 type Game struct {
 	ID       string
+	Name     string
 	ImageURI string
-	Players  int
-	Wins     int
+	Status   bool
 }
 
 func StaticGames() []Game {
 	return []Game{
-		{ID: "001", ImageURI: "/assets/images/ludo.jpg", Players: 4, Wins: 30},
-		{ID: "002", ImageURI: "/assets/images/ludo.jpg", Players: 8, Wins: 80},
-		{ID: "003", ImageURI: "/assets/images/ludo.jpg", Players: 16, Wins: 160},
+		{ID: "ludo_classic", Name: "Classic Ludo", ImageURI: "/assets/images/ludo.jpg", Status: true},
+		{ID: "#", Name: "Super Ludo", ImageURI: "/assets/images/ludo.jpg", Status: false},
+		{ID: "#", Name: "Classic UNO", ImageURI: "/assets/images/ludo.jpg", Status: false},
 	}
 }
