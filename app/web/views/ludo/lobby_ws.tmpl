@@ -11,7 +11,7 @@
     {{ range $key,$val := . }}
     <div class="border-2 border-yellow-400 bg-blue-800">
       <img class="w-14 h-14" src="/assets/images/avatar.avif" />
-      <p class="text-xs">{{ $val.Username }} </p>
+      <p class="text-xs text-ellipsis overflow-hidden w-10 my-0 m-auto">{{ $val.Username }} </p>
     </div>
     {{ end }}
     {{ range $key, $val := $items }}

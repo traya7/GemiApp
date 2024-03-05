@@ -5,6 +5,7 @@ import (
 	"GemiApp/services/auth"
 	"GemiApp/types"
 	"bytes"
+	"context"
 	"html/template"
 	"io"
 	"log"
@@ -34,31 +35,41 @@ func (h *WsHandler) Route(r *mux.Router) {
 	r.Handle("/ws/ludo/lobby", websocket.Handler(h.HandleLobby))
 }
 
-func (h *WsHandler) useAuth(r *http.Request) (*types.User, error) {
-	usr, err := middleware.AuthMiddleware(r)
-	if err != nil {
-		return nil, err
+func (h *WsHandler) useAuth(r *http.Request) (types.User, error) {
+	return func(w http.ResponseWriter, r *http.Request) {
+		usr, err := middleware.AuthMiddleware(r)
+		if err != nil {
+			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+			return
+		}
+
+		var data *types.User
+
+		if data, err = h.AuthSrv.UserStatus(usr.UserID); err != nil {
+			cookie := middleware.NewEmptyCookie()
+			http.SetCookie(w, cookie)
+			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
+			w.Write(nil)
+			return
+		}
+		ctx := context.WithValue(r.Context(), "data", data)
+		f(w, r.WithContext(ctx))
 	}
-	var data *types.User
-	if data, err = h.AuthSrv.UserStatus(usr.UserID); err != nil {
-		return nil, err
-	}
-	return data, nil
 }
 
-func (h *WsHandler) HandleLobby(ws *websocket.Conn) {
-	user, err := h.useAuth(ws.Request())
-	if err != nil {
-		ws.Close()
-	}
-	lusr := LobbyUser{
-		ID:       user.ID,
-		Username: user.Username,
-		ImageUri: user.ImgUri,
-		Ws:       ws,
-	}
+// //////
 
-	h.LobbyManager.Connect(lusr)
+func (h *WsHandler) HandleLobby(ws *websocket.Conn) {
+	ws.Request()
+	// usr := r.Context().Value("data").(*types.User)
+	// lusr := LobbyUser{
+	// 	ID:       usr.ID,
+	// 	Username: usr.Username,
+	// 	ImageUri: usr.ImgUri,
+	// 	Ws:       ws,
+	// }
+	//
+	// h.LobbyManager.Connect(lusr)
 
 	buf := make([]byte, 1024)
 	for {
