@@ -39,13 +39,12 @@ func (s *AuthService) UserLogin(username, password string) (string, string, erro
 func (s *AuthService) UserStatus(user_id string) (*types.User, error) {
 	acc, err := s.repo.GetAccountByID(user_id)
 	if err != nil {
-		return nil, ErrInvalidAccount
+		return map[string]any{}, ErrInvalidAccount
 	}
 
-	res := types.User{
-		ID:       user_id,
-		Username: acc.Username,
-		Balance:  acc.Balance,
+	res := map[string]any{
+		"Username": acc.Username,
+		"Balance":  acc.Balance,
 	}
-	return &res, nil
+	return res, nil
 }

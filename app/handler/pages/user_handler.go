@@ -3,9 +3,9 @@ package pages
 import (
 	"GemiApp/app/helpers"
 	"GemiApp/app/middleware"
+	"GemiApp/types"
 	"html/template"
 	"net/http"
-	"time"
 
 	"github.com/Masterminds/sprig/v3"
 )
@@ -22,6 +22,7 @@ func (h *PageHandler) handleLogin(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, nil)
 }
+
 func (h *PageHandler) handleRestPwd(w http.ResponseWriter, r *http.Request) {
 	data := map[string]any{}
 	data["user"] = r.Context().Value("data")
@@ -37,12 +38,13 @@ func (h *PageHandler) handleRestPwd(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, data)
 }
+
 func (h *PageHandler) handleTransactions(w http.ResponseWriter, r *http.Request) {
-	usr := r.Context().Value("data").(map[string]any)
+	usr := r.Context().Value("data").(*types.User)
 	data := map[string]any{}
 	data["user"] = usr
 	data["menu_items"] = helpers.MenuBuilder()
-	data["transactions"] = h.wltSrv.GetMyTransactions(usr["Username"].(string))
+	data["transactions"] = h.wltSrv.GetMyTransactions(usr.Username)
 
 	var funcMap = template.FuncMap{"safeURL": SafeURL}
 	tmpl := template.Must(
@@ -56,9 +58,6 @@ func (h *PageHandler) handleTransactions(w http.ResponseWriter, r *http.Request)
 	tmpl.Execute(w, data)
 }
 
-func t() {
-	time.Now().Format("15:04")
-}
 func (h *PageHandler) handleGameHistory(w http.ResponseWriter, r *http.Request) {
 	data := map[string]any{}
 	data["user"] = r.Context().Value("data")

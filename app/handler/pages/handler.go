@@ -4,6 +4,7 @@ import (
 	"GemiApp/app/middleware"
 	"GemiApp/services/auth"
 	"GemiApp/services/wallet"
+	"GemiApp/types"
 	"context"
 	"net/http"
 
@@ -43,7 +44,7 @@ func (h *PageHandler) WithAuth(f httpFunc) httpFunc {
 			http.Redirect(w, r, "/user/login", http.StatusSeeOther)
 			return
 		}
-		data := map[string]any{}
+		var data *types.User
 		if data, err = h.AuthSrv.UserStatus(usr.UserID); err != nil {
 			cookie := middleware.NewEmptyCookie()
 			http.SetCookie(w, cookie)
@@ -51,7 +52,6 @@ func (h *PageHandler) WithAuth(f httpFunc) httpFunc {
 			w.Write(nil)
 			return
 		}
-		data["user_id"] = usr.UserID
 		ctx := context.WithValue(r.Context(), "data", data)
 		f(w, r.WithContext(ctx))
 	}
