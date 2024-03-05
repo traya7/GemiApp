@@ -52,6 +52,6 @@ func (h *ApiHandler) handleUserLogin(w http.ResponseWriter, r *http.Request) {
 func (h *ApiHandler) handleUserLogout(w http.ResponseWriter, r *http.Request) {
 	cookie := middleware.NewEmptyCookie()
 	http.SetCookie(w, cookie)
-	w.Header().Set("HX-Redirect", "/login")
+	w.Header().Set("HX-Redirect", "/user/login")
 	w.Write(nil)
 }

@@ -2,7 +2,6 @@ package pages
 
 import (
 	"GemiApp/app/helpers"
-	"GemiApp/app/middleware"
 	"html/template"
 	"net/http"
 
@@ -14,20 +13,9 @@ func SafeURL(url string) template.URL {
 }
 
 func (h *PageHandler) handleHome(w http.ResponseWriter, r *http.Request) {
-	usr, err := middleware.AuthMiddleware(r)
-	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
 	data := map[string]any{}
-	if data, err = h.srv.UserStatus(usr.UserID); err != nil {
-		cookie := middleware.NewEmptyCookie()
-		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		w.Write(nil)
-		return
-	}
 
+	data["user"] = r.Context().Value("data")
 	data["menu_items"] = helpers.MenuBuilder()
 	data["games"] = helpers.StaticGames()
 
@@ -43,22 +31,10 @@ func (h *PageHandler) handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *PageHandler) handleGameDetails(w http.ResponseWriter, r *http.Request) {
-	usr, err := middleware.AuthMiddleware(r)
-	if err != nil {
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		return
-	}
-	data := map[string]any{}
-	if data, err = h.srv.UserStatus(usr.UserID); err != nil {
-		cookie := middleware.NewEmptyCookie()
-		http.SetCookie(w, cookie)
-		http.Redirect(w, r, "/login", http.StatusSeeOther)
-		w.Write(nil)
-		return
-	}
 
+	data := map[string]any{}
+	data["user"] = r.Context().Value("data")
 	data["menu_items"] = helpers.MenuBuilder()
-	data["games"] = helpers.StaticGames()
 
 	var funcMap = template.FuncMap{"safeURL": SafeURL}
 	tmpl := template.Must(

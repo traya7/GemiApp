@@ -4,7 +4,9 @@ import (
 	"GemiApp/app"
 	"GemiApp/domain"
 	"GemiApp/domain/account"
+	"GemiApp/domain/transaction"
 	"GemiApp/services/auth"
+	"GemiApp/services/wallet"
 	"log"
 	"net/http"
 )
@@ -29,14 +31,14 @@ func run(cfg Config) error {
 
 	// INIT SERVICES
 	as := auth.NewAuthService(account.NewMongoRepo(mongodb))
-
+	ts := wallet.NewWalletService(transaction.NewMongoRepo(mongodb))
 	// INIT Handler
 	handler := app.NewRouter(app.Params{
-		AuthService: as,
+		AuthService:   as,
+		WalletService: ts,
 	})
 
 	// START SERVER
-
 	log.Println("- Http Server running!")
 	if err := http.ListenAndServe(cfg.Addr, handler); err == nil {
 		return err

@@ -4,7 +4,7 @@
   <div style="background-color: #f7f7f7a3;" class="glassy flex flex-col justify-between p-6 w-2/3">
     <div class="flex flex-col items-center gap-3 py-3">
       <img src="/assets/images/avatar.avif" class="border-4 rounded-full w-32 h-32" />
-      <h2 class="text-center">Hello, <b>{{ .Username }}</b></h2>
+      <h2 class="text-center">Hello, <b>{{ .user.Username }}</b></h2>
     </div>
     <div class="flex flex-col gap-2">
 
@@ -29,7 +29,7 @@
 <div class="fixed h-16 w-full glassy z-10 flex justify-between items-center drop-shadow-md p-3">
   <a href="/" class="w-[42px] font-bold text-xl text-center">Traya7</a>
   <div class="flex w-32 rounded-lg border-2">
-    <h2 class="p-2 bg-gray-50 rounded-l-lg text-center flex-1">{{ .Balance }}</h2>
+    <h2 class="p-2 bg-gray-50 rounded-l-lg text-center flex-1">{{ .user.Balance }}</h2>
     <h2 class="py-3 px-3 bg-blue-400 rounded-r-lg">
       <p class="text-xs text-white font-bold">TND</p>
     </h2>

@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traya7 Win</title>
   <link href="./assets/global.css" rel="stylesheet">
   <link href="./assets/main.css" rel="stylesheet">
   <script src="https://unpkg.com/htmx.org@1.9.10"></script>
@@ -48,11 +49,32 @@
   <div class="p-3">
     <h2 class="text-xl mb-2 font-bold underline">BIG WINS</h2>
     <div>
-      {{ range $key,$val := .games }}
       <div class="p-4 flex justify-between glassy mb-2">
-        <h2>9032***</h2>
-        <h2>100d</h2>
-        <h2>ludo_classic</h2>
+        <div class="flex-1 text-start">
+          <h2>User</h2>
+        </div>
+
+        <div class="flex-1 text-center">
+          <h2>Game</h2>
+        </div>
+
+        <div class="flex-1 text-end">
+          <h2>Payout</h2>
+        </div>
+      </div>
+      {{ range $key,$val := list 1 2 3 4 5 6 7 8 9 }}
+      <div class="px-4 py-3 text-sm flex justify-between glassy mb-1">
+        <div class="flex-1 text-start">
+          <h2>9012****</h2>
+        </div>
+
+        <div class="flex-1 text-center">
+          <h2>Ludo_Classic</h2>
+        </div>
+
+        <div class="flex-1 text-end">
+          <h2>100d</h2>
+        </div>
       </div>
       {{ end }}
     </div>

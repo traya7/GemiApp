@@ -1,0 +1,39 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traya7 Win</title>
+  <link href="./assets/global.css" rel="stylesheet">
+  <link href="./assets/main.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+</head>
+
+<body>
+  <div class="h-screen flex flex-col justify-center items-center">
+    <h1 class="text-3xl">Welcome back!</h1>
+    <p class="text-sm">Login to get access to your account.</p>
+    <form hx-post="/api/user/login" hx-ext='json-enc' hx-swap="outerHTML" hx-target="#error_message"
+      class="glassy p-6 rounded-lg flex flex-col mt-10 gap-3" method="post">
+      <div id="error_message"></div>
+      <div class="flex flex-col">
+        <label class="text-sm font- mb-1">Username:</label>
+        <input type="text" name="username" placeholder="User0001"
+          class="border-2 tracking-widest rounded-lg border-gray-300 px-4 py-3" />
+      </div>
+      <div class="flex flex-col">
+        <label class="text-sm font- mb-1">Password:</label>
+        <input type="password" name="password" placeholder="•••••••••"
+          class="border-2 tracking-widest rounded-lg border-gray-300 px-4 py-3" />
+      </div>
+      <div class="mt-4">
+        <button class="w-full bg-[#3ac4ff] text-white py-4 rounded-xl font-bold">Sign in</button>
+      </div>
+    </form>
+  </div>
+</body>
+
+</html>

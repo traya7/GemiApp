@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traya7 Win</title>
+  <link href="./assets/global.css" rel="stylesheet">
+  <link href="./assets/main.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+</head>
+
+<body class="h-screen flex ">
+  {{ template "base_menu" . }}
+  <div class="w-full flex flex-col justify-center items-center">
+    {{ $length := len . }}
+    {{ if eq $length 0 }}
+    <p>No transactions yet.</p>
+    {{ else }}
+    {{ template "user_trans_tab" . }}
+    <div class="flex gap-1">
+      <button disabled class="bg-white py-2 w-10 disabled:bg-gray-200 rounded">1</button>
+    </div>
+    {{ end }}
+  </div>
+</body>
+
+</html>
+
+{{ define "user_trans_tab" }}
+{{ $my_id := .user.Username }}
+<div class="flex flex-col w-full p-3">
+  <div class="flex text-center py-2 text-sm mb-2 font-bold glassy">
+    <h2 class="flex-1">OPERATOR</h2>
+    <h2 class="flex-1">AMOUNT</h2>
+    <h2 class="flex-1">TIME</h2>
+  </div>
+  {{ range $key, $val := .transactions }}
+  <div class="flex items-center text-center py-2 mb-1 glassy">
+    <h2 class="flex-1">
+      {{ if eq $val.From $my_id }}
+      {{ $val.To }}
+      {{ else }}
+      {{ $val.From }}
+      {{ end }}
+    </h2>
+    <h2 class="flex-1">
+
+      {{ if eq $val.From $my_id }}
+      -
+      {{ else }}
+      +
+      {{ end }}
+      {{ $val.Amount }}
+    </h2>
+    <h2 class="flex-1 text-xs">
+      <span>{{ $val.CreatedAt | date "2006-01-02" }}</span> <br />
+      <span>{{ $val.CreatedAt | date "15:04" }}</span>
+    </h2>
+  </div>
+  {{ end }}
+</div>
+{{ end }}
