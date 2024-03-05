@@ -1,6 +1,6 @@
 package ws
 
-import "github.com/gorilla/websocket"
+import "golang.org/x/net/websocket"
 
 type LobbyUser struct {
 	ID       string

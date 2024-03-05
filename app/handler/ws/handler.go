@@ -7,12 +7,13 @@ import (
 	"bytes"
 	"context"
 	"html/template"
+	"io"
 	"log"
 	"net/http"
 
 	"github.com/Masterminds/sprig/v3"
 	"github.com/gorilla/mux"
-	"github.com/gorilla/websocket"
+	"golang.org/x/net/websocket"
 )
 
 type WsHandler struct {
@@ -31,7 +32,7 @@ func New(as *auth.AuthService) *WsHandler {
 }
 
 func (h *WsHandler) Route(r *mux.Router) {
-	r.HandleFunc("/ws/ludo/lobby", h.WithAuth(h.HandleLobby))
+	r.Handle("/ws/ludo/lobby", websocket.Handler(h.HandleLobby))
 }
 
 type httpFunc func(w http.ResponseWriter, r *http.Request)
@@ -59,33 +60,25 @@ func (h *WsHandler) WithAuth(f httpFunc) httpFunc {
 }
 
 // //////
-var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
-}
 
-func (h *WsHandler) HandleLobby(w http.ResponseWriter, r *http.Request) {
-	ws, err := upgrader.Upgrade(w, r, nil)
-	if err != nil {
-		return
-	}
+func (h *WsHandler) HandleLobby(ws *websocket.Conn) {
+	// usr := r.Context().Value("data").(*types.User)
+	// lusr := LobbyUser{
+	// 	ID:       usr.ID,
+	// 	Username: usr.Username,
+	// 	ImageUri: usr.ImgUri,
+	// 	Ws:       ws,
+	// }
+	//
+	// h.LobbyManager.Connect(lusr)
 
-	usr := r.Context().Value("data").(*types.User)
-	lusr := LobbyUser{
-		ID:       usr.ID,
-		Username: usr.Username,
-		ImageUri: usr.ImgUri,
-		Ws:       ws,
-	}
-
-	h.LobbyManager.Connect(lusr)
-
+	buf := make([]byte, 1024)
 	for {
-		_, buf, err := ws.ReadMessage()
+		buf, err := ws.Read(buf)
 		if err != nil {
-			if websocket.IsCloseError(err, websocket.CloseGoingAway, websocket.CloseNormalClosure) {
+			if err == io.EOF {
 				// CLIENT DISCONNECT
-				h.LobbyManager.Disconnect(lusr)
+				// h.LobbyManager.Disconnect(lusr)
 				return
 			}
 			log.Println(err)
@@ -104,7 +97,7 @@ func (h *WsHandler) LobbyListener() {
 		tmpl.Execute(&buf, msg.Users)
 
 		for _, v := range msg.Users {
-			v.Ws.WriteMessage(1, buf.Bytes())
+			v.Ws.Write(buf.Bytes())
 		}
 	}
 }
