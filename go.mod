@@ -5,6 +5,7 @@ go 1.22.0
 require (
 	github.com/Masterminds/sprig/v3 v3.2.3
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/google/uuid v1.1.1
 	github.com/gorilla/mux v1.8.1
 	go.mongodb.org/mongo-driver v1.14.0
 	golang.org/x/crypto v0.20.0
@@ -15,7 +16,6 @@ require (
 	github.com/Masterminds/goutils v1.1.1 // indirect
 	github.com/Masterminds/semver/v3 v3.2.0 // indirect
 	github.com/golang/snappy v0.0.1 // indirect
-	github.com/google/uuid v1.1.1 // indirect
 	github.com/huandu/xstrings v1.3.3 // indirect
 	github.com/imdario/mergo v0.3.11 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect

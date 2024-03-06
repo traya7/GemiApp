@@ -3,6 +3,7 @@ package pages
 import (
 	"GemiApp/app/middleware"
 	"GemiApp/services/auth"
+	"GemiApp/services/game"
 	"GemiApp/services/wallet"
 	"GemiApp/types"
 	"context"
@@ -14,12 +15,14 @@ import (
 type PageHandler struct {
 	AuthSrv *auth.AuthService
 	wltSrv  *wallet.WalletService
+	gmeSrv  *game.GameService
 }
 
-func New(s *auth.AuthService, s2 *wallet.WalletService) *PageHandler {
+func New(s1 *auth.AuthService, s2 *wallet.WalletService, s3 *game.GameService) *PageHandler {
 	return &PageHandler{
-		AuthSrv: s,
+		AuthSrv: s1,
 		wltSrv:  s2,
+		gmeSrv:  s3,
 	}
 }
 

@@ -16,7 +16,9 @@
 <body style="background-image: url(/assets/ludo/resources/20f05622-c57f-4f5b-a1b7-01a99c56627d.d87af.jpg);"
   class="bg-cover bg-no-repeat">
   <div class="h-screen w-screen flex justify-center items-center">
-    <div hx-ext="ws" ws-connect="/ws/ludo/lobby">
+    {{ $GameID := .game_id }}
+    {{ $ModeID := .mode_id }}
+    <div hx-ext="ws" ws-connect="/ws/ludo/lobby?gid={{$GameID}}&id={{$ModeID}}">
       <div id="content"
         style="background: rgb(63,94,251); background: radial-gradient(circle, rgba(63,94,251,1) 0%, rgba(42,63,168,1) 63%, rgba(0,0,0,1) 100%)"
         class="p-8 border w-full mx-3 border-yellow-400 text-center text-white">

@@ -17,7 +17,7 @@ func (h *PageHandler) handleHome(w http.ResponseWriter, r *http.Request) {
 
 	data["user"] = r.Context().Value("data")
 	data["menu_items"] = helpers.MenuBuilder()
-	data["games"] = helpers.StaticGames()
+	data["games"] = h.gmeSrv.GetAllGames()
 
 	var funcMap = template.FuncMap{"safeURL": SafeURL}
 	tmpl := template.Must(
@@ -31,10 +31,18 @@ func (h *PageHandler) handleHome(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *PageHandler) handleGameDetails(w http.ResponseWriter, r *http.Request) {
+	// Get Game id from Request
 
 	data := map[string]any{}
 	data["user"] = r.Context().Value("data")
 	data["menu_items"] = helpers.MenuBuilder()
+	data["game_status"] = true
+
+	gd, err := h.gmeSrv.GetGameDetails("ludo_classic")
+	if err != nil {
+		data["game_status"] = false
+	}
+	data["game_detail"] = gd
 
 	var funcMap = template.FuncMap{"safeURL": SafeURL}
 	tmpl := template.Must(

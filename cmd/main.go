@@ -4,8 +4,11 @@ import (
 	"GemiApp/app"
 	"GemiApp/domain"
 	"GemiApp/domain/account"
+	gd "GemiApp/domain/game"
 	"GemiApp/domain/transaction"
+
 	"GemiApp/services/auth"
+	"GemiApp/services/game"
 	"GemiApp/services/wallet"
 	"log"
 	"net/http"
@@ -31,11 +34,13 @@ func run(cfg Config) error {
 
 	// INIT SERVICES
 	as := auth.NewAuthService(account.NewMongoRepo(mongodb))
+	gs := game.NewGameService(gd.NewMemo())
 	ts := wallet.NewWalletService(transaction.NewMongoRepo(mongodb))
 	// INIT Handler
 	handler := app.NewRouter(app.Params{
 		AuthService:   as,
 		WalletService: ts,
+		GameService:   gs,
 	})
 
 	// START SERVER

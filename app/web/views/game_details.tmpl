@@ -15,45 +15,39 @@
 <body class="min-h-screen">
 
   {{ template "base_menu" . }}
+
+  {{ if eq .game_status false }}
+  <div class="p-2 mx-3 my-6 glassy">
+    <h2 class="text-center">Opps, game not found.</h2>
+  </div>
+  {{ else }}
+  {{ $GameID := .game_detail.ID }}
   <div class="p-2 mx-3 my-6 glassy">
     <div class="flex items-center">
       <div class="p-4">
         <img src="/assets/images/ludo-logo.png" class="w-20" />
       </div>
       <div class="flex-1">
-        <h1 class="text-xl mb-2">Ludo Classic</h1>
-        <p class="text-sm">
-          Ludo is a strategy board game for two to four players, in which the players race their four tokens from start
-          to finish according to the rolls of a single die. </p>
+        <h1 class="text-xl mb-2">{{ .game_detail.Name }}</h1>
+        <p class="text-sm"> {{ .game_detail.Description }} </p>
       </div>
     </div>
   </div>
   <div class="m-3">
     <h2 class="text-xl font-bold underline">MODES</h2>
+    {{ range $key, $val := .game_detail.Modes }}
     <div class="my-2 flex items-center p-3 glassy rounded-lg">
       <div class="flex-1">
-        <h2>PLAYERS: 4</h2>
-        <h2>ROUNDS: 1</h2>
+        <h2>PLAYERS: {{ $val.NbPlayers}}</h2>
+        <h2>ROUNDS: {{ $val.NbRounds }}</h2>
       </div>
-      <a href="/game/ludo/lobby?id=dfx8s" class="bg-black text-white px-4 py-2 rounded-lg">
+      <a href="/game/ludo/lobby?gid={{$GameID}}&id={{$val.ID}}" class="bg-black text-white px-4 py-2 rounded-lg">
         <p>PLAY</p>
       </a>
     </div>
-    <div class="my-2 flex items-center p-3 glassy rounded-lg">
-      <div class="flex-1">
-        <h2>PLAYERS: 8</h2>
-        <h2>ROUNDS: 2</h2>
-      </div>
-      <button class="bg-black text-white px-4 py-2 rounded-lg"> PLAY </button>
-    </div>
-    <div class="my-2 flex items-center p-3 glassy rounded-lg">
-      <div class="flex-1">
-        <h2>PLAYERS: 16</h2>
-        <h2>ROUNDS: 2</h2>
-      </div>
-      <button class="bg-black text-white px-4 py-2 rounded-lg"> PLAY </button>
-    </div>
+    {{ end }}
   </div>
+  {{ end }}
 </body>
 
 </html>
