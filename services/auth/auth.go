@@ -1,51 +1,85 @@
 package auth
 
 import (
-	"GemiApp/domain/account"
 	"GemiApp/types"
+	"bytes"
+	"encoding/json"
 	"errors"
-
-	"golang.org/x/crypto/bcrypt"
+	"fmt"
+	"net/http"
 )
 
 type AuthService struct {
-	repo account.Repository
+	AuthUri string
 }
 
-var (
-	ErrInvalidUsername = errors.New("Username invalid")
-	ErrInvalidPassword = errors.New("Password invalid")
-	ErrInvalidAccount  = errors.New("User ID invalid")
-)
-
-func NewAuthService(r account.Repository) *AuthService {
+func NewAuthService(AuthUri string) *AuthService {
 	return &AuthService{
-		repo: r,
+		AuthUri: AuthUri,
 	}
 }
 
-func (s *AuthService) UserLogin(username, password string) (string, string, error) {
-	acc, err := s.repo.GetAccountByUsername(username)
+func (s *AuthService) UserLogin(username, password string) (*types.User, error) {
+	to := fmt.Sprintf("%s%s", s.AuthUri, "/login")
+	body := map[string]any{"username": username, "password": password}
+
+	result, err := MakePostRequest(to, body, nil)
 	if err != nil {
-		return "", "", ErrInvalidUsername
+		return nil, err
 	}
-	err = bcrypt.CompareHashAndPassword([]byte(acc.Password), []byte(password))
-	if err != nil {
-		return "", "", ErrInvalidPassword
-	}
-	return acc.ID, acc.Role, nil
+	return &types.User{
+		ID:       result["ID"].(string),
+		Username: result["Username"].(string),
+		Balance:  result["Balance"].(float64),
+		ImgUri:   result["ImgUri"].(string),
+		Cookie:   result["cookie"].(*http.Cookie),
+	}, nil
 }
 
-func (s *AuthService) UserStatus(user_id string) (*types.User, error) {
-	acc, err := s.repo.GetAccountByID(user_id)
+func (s *AuthService) UserStatus(cookie *http.Cookie) (*types.User, error) {
+	to := fmt.Sprintf("%s%s", s.AuthUri, "/status")
+	body := map[string]any{}
+	result, err := MakePostRequest(to, body, cookie)
 	if err != nil {
-		return nil, ErrInvalidAccount
+		return nil, err
 	}
+	return &types.User{
+		ID:       result["ID"].(string),
+		Username: result["Username"].(string),
+		Balance:  result["Balance"].(float64),
+		ImgUri:   result["ImgUri"].(string),
+	}, nil
+}
 
-	res := types.User{
-		ID:       user_id,
-		Username: acc.Username,
-		Balance:  acc.Balance,
+func MakePostRequest(to string, body map[string]any, cookie *http.Cookie) (map[string]any, error) {
+	data, err := json.Marshal(body)
+	if err != nil {
+		return nil, errors.New("cannot parse request.")
 	}
-	return &res, nil
+	r, err := http.NewRequest("POST", to, bytes.NewBuffer(data))
+	if err != nil {
+		return nil, errors.New("cannot prepare request.")
+	}
+	r.Header.Add("Content-Type", "application/json")
+	if cookie != nil {
+		r.AddCookie(cookie)
+	}
+	client := &http.Client{}
+	rs, err := client.Do(r)
+	if err != nil {
+		return nil, errors.New("cannot call server")
+	}
+	defer rs.Body.Close()
+	var result map[string]any
+	if err := json.NewDecoder(rs.Body).Decode(&result); err != nil {
+		return nil, errors.New("cannot parse response data.")
+	}
+	if rs.StatusCode != 200 {
+		return nil, errors.New(result["message"].(string))
+	}
+	sid := rs.Header.Get("Set-Cookie")
+	if sid != "" {
+		result["cookie"] = rs.Cookies()[0]
+	}
+	return result, nil
 }

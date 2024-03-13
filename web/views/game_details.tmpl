@@ -1,0 +1,60 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Traya7 Win</title>
+  <link href="./assets/global.css" rel="stylesheet">
+  <link href="./assets/main.css" rel="stylesheet">
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <script src="https://unpkg.com/htmx.org/dist/ext/json-enc.js"></script>
+</head>
+
+<body class="min-h-screen">
+
+  {{ template "base_menu" . }}
+
+  {{ if eq .game_status false }}
+  <div class="p-2 mx-3 my-6 glassy">
+    <h2 class="text-center">Opps, game not found.</h2>
+  </div>
+  {{ else }}
+  {{ $GameID := .game_detail.ID }}
+  <div class="p-2 mx-3 my-6 glassy">
+    <div class="flex items-center">
+      <div class="p-4">
+        <img src="/assets/images/ludo-logo.png" class="w-16" />
+      </div>
+      <div class="flex-1">
+        <h1 class="text-xl mb-2">{{ .game_detail.Name }}</h1>
+        <p class="text-xs"> {{ .game_detail.Description }} </p>
+      </div>
+    </div>
+    <div class="p-4">
+      <a href="/game?gid={{$GameID}}" class="block bg-green-600 py-3 w-full rounded-md">
+        <p class="text-white font-bold text-center">Play</p>
+      </a>
+    </div>
+  </div>
+  <!--
+  <div class="m-3">
+    <h2 class="text-xl font-bold underline">MODES</h2>
+    {{ range $key, $val := .game_detail.Modes }}
+    <div class="my-2 flex items-center p-3 glassy rounded-lg">
+      <div class="flex-1">
+        <h2>PLAYERS: {{ $val.NbPlayers}}</h2>
+        <h2>ROUNDS: {{ $val.NbRounds }}</h2>
+      </div>
+      <a href="/game?gid={{$GameID}}&id={{$val.ID}}" class="bg-black text-white px-4 py-2 rounded-lg">
+        <p>PLAY</p>
+      </a>
+    </div>
+    {{ end }}
+  </div>
+  -->
+  {{ end }}
+</body>
+
+</html>

@@ -1,21 +1,16 @@
 package wallet
 
-import (
-	"GemiApp/domain/transaction"
-)
+import ()
 
 type WalletService struct {
-	repo transaction.Repository
 }
 
 var ()
 
-func NewWalletService(r transaction.Repository) *WalletService {
-	return &WalletService{
-		repo: r,
-	}
+func NewWalletService() *WalletService {
+	return &WalletService{}
 }
 
-func (s *WalletService) GetMyTransactions(username string) []transaction.Transaction {
-	return s.repo.GetAccountTransactions(username)
+func (s *WalletService) GetMyTransactions(username string) []any {
+	return []any{}
 }

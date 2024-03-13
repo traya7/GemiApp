@@ -1,12 +1,7 @@
 package main
 
 import (
-	"GemiApp/app"
-	"GemiApp/domain"
-	"GemiApp/domain/account"
-	gd "GemiApp/domain/game"
-	"GemiApp/domain/transaction"
-
+	"GemiApp/handler"
 	"GemiApp/services/auth"
 	"GemiApp/services/game"
 	"GemiApp/services/wallet"
@@ -18,29 +13,23 @@ type Config struct {
 	Addr     string
 	MongoURI string
 	MongoDB  string
-}
 
-func newServer() {
-
+	AuthUri   string
+	WalletUri string
+	GameUri   string
 }
 
 func run(cfg Config) error {
-	// INIT DB CONNECTION
-	mongodb, err := domain.NewMongoDB(cfg.MongoURI, cfg.MongoDB)
-	if err != nil {
-		return err
-	}
-	log.Println("- Mongo DB connected!")
-
 	// INIT SERVICES
-	as := auth.NewAuthService(account.NewMongoRepo(mongodb))
-	gs := game.NewGameService(gd.NewMemo())
-	ts := wallet.NewWalletService(transaction.NewMongoRepo(mongodb))
+	as := auth.NewAuthService(cfg.AuthUri)
+	gs := game.NewGameService(cfg.GameUri)
+	ws := wallet.NewWalletService()
+
 	// INIT Handler
-	handler := app.NewRouter(app.Params{
+	handler := handler.NewRouter(handler.Params{
 		AuthService:   as,
-		WalletService: ts,
 		GameService:   gs,
+		WalletService: ws,
 	})
 
 	// START SERVER
@@ -53,9 +42,13 @@ func run(cfg Config) error {
 
 func main() {
 	cfg := Config{
-		Addr:     ":8000",
-		MongoURI: "mongodb://dbxadmin2:Aopj0R89Zp3J@203.161.44.242:27017/",
-		MongoDB:  "gmetour",
+		Addr: ":8000",
+		// MongoURI: "mongodb://dbxadmin2:Aopj0R89Zp3J@203.161.44.242:27017/",
+		// MongoDB:  "gmetour",
+		AuthUri:   "http://api.traya7.com/v1/auth",
+		WalletUri: "http://api.traya7.com/v1/wallet",
+
+		GameUri: "http://traya7.com/gameservice",
 	}
 
 	if err := run(cfg); err != nil {
