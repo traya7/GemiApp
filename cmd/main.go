@@ -10,9 +10,7 @@ import (
 )
 
 type Config struct {
-	Addr     string
-	MongoURI string
-	MongoDB  string
+	Addr string
 
 	AuthUri   string
 	WalletUri string
@@ -42,9 +40,7 @@ func run(cfg Config) error {
 
 func main() {
 	cfg := Config{
-		Addr: ":8000",
-		// MongoURI: "mongodb://dbxadmin2:Aopj0R89Zp3J@203.161.44.242:27017/",
-		// MongoDB:  "gmetour",
+		Addr:      ":8000",
 		AuthUri:   "http://api.traya7.com/v1/auth",
 		WalletUri: "http://api.traya7.com/v1/wallet",
 
