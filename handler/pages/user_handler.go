@@ -32,6 +32,7 @@ func (h *PageHandler) handleRestPwd(w http.ResponseWriter, r *http.Request) {
 			PagesPath["ResetPwdPage"],
 		),
 	)
+
 	w.Header().Set("Content-Type", "text/html")
 	tmpl.Execute(w, data)
 }

@@ -45,6 +45,7 @@ func main() {
 		WalletUri: "http://api.traya7.com/v1/wallet",
 
 		GameUri: "http://traya7.com/gameservice",
+		//GameUri: "http://192.168.229.117:8001/gameservice",
 	}
 
 	if err := run(cfg); err != nil {

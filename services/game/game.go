@@ -80,5 +80,5 @@ func (s *GameService) NewGameSession(user_id, game_id string) map[string]any {
 	return r
 }
 func (s *GameService) GameUriFrom(id string) string {
-	return s.Uri + "/game?id=" + id
+	return s.Uri + "/game/ludo?id=" + id
 }

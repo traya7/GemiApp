@@ -15,7 +15,7 @@
 <body class="h-screen flex ">
   {{ template "base_menu" . }}
   <div class="w-full flex justify-center items-center">
-    <form hx-post="/api/user/login" hx-ext='json-enc' hx-swap="outerHTML" hx-target="#error_message"
+    <form hx-post="/api/user/reset" hx-ext='json-enc' hx-swap="outerHTML" hx-target="#error_message"
       class="glassy p-6 rounded-lg flex flex-col mt-10 gap-3" method="post">
       <div id="error_message"></div>
       <div class="flex flex-col">

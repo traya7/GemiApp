@@ -36,6 +36,19 @@ func (s *AuthService) UserLogin(username, password string) (*types.User, error) 
 	}, nil
 }
 
+func (s *AuthService) UserResetPwd(cookie *http.Cookie, oldp, newp string) error {
+	to := fmt.Sprintf("%s%s", s.AuthUri, "/resetpwd")
+	body := map[string]any{
+		"old_pwd": oldp,
+		"new_pwd": newp,
+	}
+	_, err := MakePostRequest(to, body, cookie)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (s *AuthService) UserStatus(cookie *http.Cookie) (*types.User, error) {
 	to := fmt.Sprintf("%s%s", s.AuthUri, "/status")
 	body := map[string]any{}
@@ -54,11 +67,11 @@ func (s *AuthService) UserStatus(cookie *http.Cookie) (*types.User, error) {
 func MakePostRequest(to string, body map[string]any, cookie *http.Cookie) (map[string]any, error) {
 	data, err := json.Marshal(body)
 	if err != nil {
-		return nil, errors.New("cannot parse request.")
+		return nil, errors.New("internal error [001].")
 	}
 	r, err := http.NewRequest("POST", to, bytes.NewBuffer(data))
 	if err != nil {
-		return nil, errors.New("cannot prepare request.")
+		return nil, errors.New("internal error [002].")
 	}
 	r.Header.Add("Content-Type", "application/json")
 	if cookie != nil {
@@ -67,12 +80,12 @@ func MakePostRequest(to string, body map[string]any, cookie *http.Cookie) (map[s
 	client := &http.Client{}
 	rs, err := client.Do(r)
 	if err != nil {
-		return nil, errors.New("cannot call server")
+		return nil, errors.New("internal error [003]")
 	}
 	defer rs.Body.Close()
 	var result map[string]any
 	if err := json.NewDecoder(rs.Body).Decode(&result); err != nil {
-		return nil, errors.New("cannot parse response data.")
+		return nil, errors.New("internal error [004].")
 	}
 	if rs.StatusCode != 200 {
 		return nil, errors.New(result["message"].(string))
